@@ -1,0 +1,102 @@
+# ==============================================================================
+# Production .gitignore for Grounded RAG Platform
+# ==============================================================================
+
+# --- Secrets & Environment Variables ---
+# NEVER commit real credentials, API keys, or secrets
+.env
+.env*.local
+*.env
+!.env.example
+
+# --- Python & Virtual Environments ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environments
+.venv/
+venv/
+ENV/
+env/
+ENV*/
+
+# Pytest & Coverage
+.pytest_cache/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+htmlcov/
+
+# --- Node.js & Frontend ---
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Frontend production build output
+frontend/dist/
+frontend/.vite/
+dist/
+.vite/
+
+# --- Data, Uploaded PDFs & Vector Store ---
+# Keep directory structure via .gitkeep, ignore actual user files & vectors
+backend/data/documents/*
+!backend/data/documents/.gitkeep
+
+backend/data/chromadb/*
+!backend/data/chromadb/.gitkeep
+
+# Catch any loose documents or local SQLite files
+*.sqlite3
+*.db
+*.pdf
+
+# --- Logs & Telemetry ---
+*.log
+logs/
+
+# --- Operating System & IDE Files ---
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE configuration
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~

@@ -1,0 +1,146 @@
+[
+  {
+    "id": "q01",
+    "question": "What is the monthly price of the Acme Professional Tier when billed annually?",
+    "expected_source": "acme_knowledge_base.md",
+    "expected_answer": "$49 per user per month",
+    "is_answerable": true,
+    "keywords": ["$49", "professional tier", "annually"]
+  },
+  {
+    "id": "q02",
+    "question": "How much storage is included in the Acme Developer Tier?",
+    "expected_source": "acme_knowledge_base.md",
+    "expected_answer": "5 GB of persistent cloud storage",
+    "is_answerable": true,
+    "keywords": ["5 GB", "developer tier", "storage"]
+  },
+  {
+    "id": "q03",
+    "question": "What is the guaranteed support response time for Enterprise Tier customers?",
+    "expected_source": "acme_knowledge_base.md",
+    "expected_answer": "15-minute response time",
+    "is_answerable": true,
+    "keywords": ["15-minute", "response time", "phone and Slack"]
+  },
+  {
+    "id": "q04",
+    "question": "What encryption standard is used for data at rest on the Acme platform?",
+    "expected_source": "acme_knowledge_base.md",
+    "expected_answer": "AES-256-GCM with customer-managed encryption keys",
+    "is_answerable": true,
+    "keywords": ["AES-256", "AES-256-GCM", "encryption at rest"]
+  },
+  {
+    "id": "q05",
+    "question": "Which cryptographic protocol is mandated for data in transit?",
+    "expected_source": "acme_knowledge_base.md",
+    "expected_answer": "TLS 1.3 with automated HSTS header enforcement",
+    "is_answerable": true,
+    "keywords": ["TLS 1.3", "in transit", "HSTS"]
+  },
+  {
+    "id": "q06",
+    "question": "What compliance certifications does Acme maintain?",
+    "expected_source": "acme_knowledge_base.md",
+    "expected_answer": "SOC 2 Type II, ISO/IEC 27001, HIPAA BAA readiness, and PCI-DSS Level 1",
+    "is_answerable": true,
+    "keywords": ["SOC 2 Type II", "ISO/IEC 27001", "HIPAA", "PCI-DSS"]
+  },
+  {
+    "id": "q07",
+    "question": "How frequently are third-party penetration tests conducted?",
+    "expected_source": "acme_knowledge_base.md",
+    "expected_answer": "Semi-annually",
+    "is_answerable": true,
+    "keywords": ["semi-annually", "penetration"]
+  },
+  {
+    "id": "q08",
+    "question": "What is the guaranteed monthly uptime for Enterprise Tier deployments?",
+    "expected_source": "acme_knowledge_base.md",
+    "expected_answer": "99.95% monthly uptime",
+    "is_answerable": true,
+    "keywords": ["99.95%", "uptime", "Enterprise"]
+  },
+  {
+    "id": "q09",
+    "question": "How much advance notice is given for scheduled maintenance windows?",
+    "expected_source": "acme_knowledge_base.md",
+    "expected_answer": "Announced at least 72 hours in advance",
+    "is_answerable": true,
+    "keywords": ["72 hours", "maintenance", "Sundays"]
+  },
+  {
+    "id": "q10",
+    "question": "What service credit is issued if monthly availability drops below 95.0%?",
+    "expected_source": "acme_knowledge_base.md",
+    "expected_answer": "50% service credit applied to the next billing cycle invoice",
+    "is_answerable": true,
+    "keywords": ["50%", "credit", "95.0%"]
+  },
+  {
+    "id": "q11",
+    "question": "How frequently are incremental database backups performed?",
+    "expected_source": "acme_knowledge_base.md",
+    "expected_answer": "Every 5 minutes with a rolling 30-day recovery window",
+    "is_answerable": true,
+    "keywords": ["5 minutes", "incremental", "backups", "30-day"]
+  },
+  {
+    "id": "q12",
+    "question": "How long is the grace period before deleted customer data is permanently shredded?",
+    "expected_source": "acme_knowledge_base.md",
+    "expected_answer": "30-day soft-delete grace period followed by hard purge within 90 days",
+    "is_answerable": true,
+    "keywords": ["30-day", "grace period", "90 days", "NIST"]
+  },
+  {
+    "id": "q13",
+    "question": "What is the refund policy duration for Professional Tier subscriptions?",
+    "expected_source": "acme_knowledge_base.md",
+    "expected_answer": "14-day no-questions-asked money-back guarantee",
+    "is_answerable": true,
+    "keywords": ["14-day", "money-back guarantee", "refund"]
+  },
+  {
+    "id": "q14",
+    "question": "How much notice is required to terminate an Enterprise annual contract?",
+    "expected_source": "acme_knowledge_base.md",
+    "expected_answer": "60 days written notice prior to term expiration",
+    "is_answerable": true,
+    "keywords": ["60 days", "written notice", "termination"]
+  },
+  {
+    "id": "q15",
+    "question": "What is the penalty fee for mid-term early termination of an enterprise agreement?",
+    "expected_source": "acme_knowledge_base.md",
+    "expected_answer": "50% of the remaining contracted commitment value",
+    "is_answerable": true,
+    "keywords": ["50%", "remaining", "commitment value"]
+  },
+  {
+    "id": "q16",
+    "question": "What is the weather forecast for Mars colony base Alpha tomorrow?",
+    "expected_source": null,
+    "expected_answer": "Cannot answer / insufficient information",
+    "is_answerable": false,
+    "keywords": []
+  },
+  {
+    "id": "q17",
+    "question": "How do you configure quantum entanglement teleportation algorithms in Python?",
+    "expected_source": null,
+    "expected_answer": "Cannot answer / insufficient information",
+    "is_answerable": false,
+    "keywords": []
+  },
+  {
+    "id": "q18",
+    "question": "What are the winning lottery numbers for the Mega Millions next week?",
+    "expected_source": null,
+    "expected_answer": "Cannot answer / insufficient information",
+    "is_answerable": false,
+    "keywords": []
+  }
+]
