@@ -48,10 +48,17 @@ async def rate_limit_handler(request: Request, exc: RateLimitExceeded):
     )
 
 
-# CORS Middleware setup
+# CORS Middleware setup supporting Vercel and local origins
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Permits requests from React Vite frontend
+    allow_origins=[
+        "http://localhost:5173",
+        "http://localhost:3000",
+        "http://localhost:8000",
+        "https://rag-orcin-sigma.vercel.app",
+        "https://rag-5djx.onrender.com",
+    ],
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

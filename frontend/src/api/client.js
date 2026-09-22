@@ -2,7 +2,11 @@
  * API Client for interacting with the FastAPI Grounded RAG backend.
  */
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL ||
+  (typeof window !== 'undefined' && window.location.hostname !== 'localhost'
+    ? 'https://rag-5djx.onrender.com'
+    : 'http://localhost:8000');
 export const DEFAULT_API_KEY = 'rag-secret-key-prod-2026';
 
 /**
