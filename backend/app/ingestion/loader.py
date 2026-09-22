@@ -35,12 +35,16 @@ def detect_markdown_heading(text: str) -> str:
     return "General"
 
 
-def load_pdf(file_path: Path) -> LoadedDocument:
-    """Extract text from PDF page by page using pypdf."""
+def load_pdf(file_path: Path, max_pages: int = 15) -> LoadedDocument:
+    """Extract text from PDF page by page using pypdf with max page protection."""
     reader = PdfReader(str(file_path))
     pages: List[DocumentPage] = []
     
-    for idx, page in enumerate(reader.pages):
+    total_pages = len(reader.pages)
+    pages_to_read = min(total_pages, max_pages)
+
+    for idx in range(pages_to_read):
+        page = reader.pages[idx]
         raw_text = page.extract_text() or ""
         clean_text = raw_text.strip()
         if not clean_text:

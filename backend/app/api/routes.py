@@ -94,6 +94,9 @@ async def ingest_document(
         hybrid.vector_store = vs
         hybrid.bm25_retriever = bm25
 
+        import gc
+        gc.collect()
+
         return IngestResponse(
             filename=filename,
             status=result.get("status", "success"),

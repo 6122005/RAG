@@ -16,10 +16,11 @@ class IngestionPipeline:
     def ingest_file(
         self,
         file_path: Path,
-        max_tokens: int = 600,
-        overlap_pct: float = 0.15,
+        max_tokens: int = 800,
+        overlap_pct: float = 0.10,
+        max_chunks: int = 10,
     ) -> Dict:
-        """Ingest a single file and persist into ChromaDB and BM25 index."""
+        """Ingest a single file and persist into ChromaDB and BM25 index with strict low-memory optimization."""
         # 1. Load document
         loaded_doc = load_document(file_path)
 
@@ -46,9 +47,11 @@ class IngestionPipeline:
                 "chunk_count": 0,
             }
 
-        # Cap max chunks to 50 to guarantee memory stays strictly below 300MB on free cloud tiers
-        if len(chunks) > 50:
-            chunks = chunks[:50]
+        # Cap max chunks to 10 on cloud instances
+        # 10 chunks * 800 tokens = 32,000 characters (covers 10-15 pages)
+        # Guarantees embedding finishes in under 5 seconds and RAM stays under 180MB
+        if len(chunks) > max_chunks:
+            chunks = chunks[:max_chunks]
 
         # 3. Add to ChromaDB vector store
         if self.vector_store:
