@@ -4,10 +4,13 @@ import os
 from functools import lru_cache
 from pathlib import Path
 
-# Ensure HuggingFace cache resides on D: drive and uses local cache instantly
-os.environ.setdefault("HF_HOME", r"D:\.cache\huggingface")
-os.environ.setdefault("HF_HUB_OFFLINE", "1")
-os.environ.setdefault("TRANSFORMERS_OFFLINE", "1")
+# If local D:\.cache\huggingface exists (local Windows dev), use it; otherwise allow online downloading in cloud (Render/Linux)
+local_hf_cache = Path(r"D:\.cache\huggingface")
+if local_hf_cache.exists():
+    os.environ.setdefault("HF_HOME", str(local_hf_cache))
+    os.environ.setdefault("HF_HUB_OFFLINE", "1")
+    os.environ.setdefault("TRANSFORMERS_OFFLINE", "1")
+
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
