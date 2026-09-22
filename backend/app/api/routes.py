@@ -41,17 +41,20 @@ async def health_check() -> Dict[str, Any]:
         if settings.LLM_PROVIDER == "openrouter"
         else (settings.GEMINI_MODEL if settings.LLM_PROVIDER == "gemini" else "default")
     )
+    is_cloud_fast = bool(os.environ.get("RENDER")) or settings.EMBEDDING_PROVIDER.lower() in ("fast", "fast-semantic", "lightweight")
+    active_emb = "fast-semantic" if is_cloud_fast else settings.EMBEDDING_PROVIDER
     return {
         "status": "healthy",
-        "version": "v1.1-speed-fix",
+        "version": "v1.2-fast-cloud",
         "llm_provider": settings.LLM_PROVIDER,
         "llm_model": model_name,
         "has_openrouter_key": bool(settings.OPENROUTER_API_KEY),
         "has_gemini_key": bool(settings.GEMINI_API_KEY),
-        "embedding_provider": settings.EMBEDDING_PROVIDER,
-        "embedding_model": settings.EMBEDDING_MODEL,
+        "embedding_provider": active_emb,
+        "embedding_model": "384d-fast-semantic" if is_cloud_fast else settings.EMBEDDING_MODEL,
         "reranker_model": settings.RERANKER_MODEL,
     }
+
 
 
 @router.post(
