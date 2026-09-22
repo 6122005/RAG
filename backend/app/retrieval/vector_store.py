@@ -2,6 +2,7 @@
 
 import os
 from pathlib import Path
+from functools import lru_cache
 from typing import Any, Dict, List, Optional, Tuple
 import chromadb
 from chromadb.api.models.Collection import Collection
@@ -10,6 +11,7 @@ from ..ingestion.chunker import DocumentChunk
 from ..config import get_settings
 
 
+@lru_cache(maxsize=1)
 def get_embedding_function():
     """Factory for embedding functions supporting sentence-transformers, Gemini, or mock."""
     settings = get_settings()
@@ -29,6 +31,17 @@ def get_embedding_function():
         return embedding_functions.SentenceTransformerEmbeddingFunction(
             model_name=settings.EMBEDDING_MODEL
         )
+
+
+_shared_vector_store = None
+
+
+def get_shared_vector_store() -> "ChromaVectorStore":
+    """Return shared ChromaVectorStore singleton to prevent memory leaks and redundant DB locks."""
+    global _shared_vector_store
+    if _shared_vector_store is None:
+        _shared_vector_store = ChromaVectorStore()
+    return _shared_vector_store
 
 
 class ChromaVectorStore:

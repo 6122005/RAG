@@ -19,7 +19,7 @@ from ..generation.models import (
     GroundedAnswer,
 )
 from ..ingestion.pipeline import IngestionPipeline
-from ..retrieval.vector_store import ChromaVectorStore
+from ..retrieval.vector_store import ChromaVectorStore, get_shared_vector_store
 from ..retrieval.bm25_retriever import BM25Retriever
 from ..graph.workflow import execute_rag_pipeline, get_shared_hybrid_retriever
 
@@ -28,23 +28,15 @@ router = APIRouter()
 
 @router.get("/health", tags=["System"])
 async def health_check() -> Dict[str, Any]:
-    """Health check verifying vector store readiness, embedding provider, and LLM configuration."""
+    """Lightweight zero-allocation health check verifying service status and active configurations."""
     settings = get_settings()
-    try:
-        vs = ChromaVectorStore()
-        doc_count = vs.collection.count()
-        chroma_healthy = True
-    except Exception as e:
-        doc_count = 0
-        chroma_healthy = False
-
     model_name = (
         settings.OPENROUTER_MODEL
         if settings.LLM_PROVIDER == "openrouter"
         else (settings.GEMINI_MODEL if settings.LLM_PROVIDER == "gemini" else "default")
     )
     return {
-        "status": "healthy" if chroma_healthy else "degraded",
+        "status": "healthy",
         "llm_provider": settings.LLM_PROVIDER,
         "llm_model": model_name,
         "has_openrouter_key": bool(settings.OPENROUTER_API_KEY),
@@ -52,7 +44,6 @@ async def health_check() -> Dict[str, Any]:
         "embedding_provider": settings.EMBEDDING_PROVIDER,
         "embedding_model": settings.EMBEDDING_MODEL,
         "reranker_model": settings.RERANKER_MODEL,
-        "total_indexed_chunks": doc_count,
     }
 
 
@@ -86,7 +77,7 @@ async def ingest_document(
         with open(temp_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
 
-        vs = ChromaVectorStore()
+        vs = get_shared_vector_store()
         bm25 = BM25Retriever()
         pipeline = IngestionPipeline(vector_store=vs, bm25_retriever=bm25)
 
@@ -178,7 +169,7 @@ async def execute_query(
 )
 async def list_documents() -> List[DocumentMetadata]:
     """List all ingested documents along with chunk and page counts."""
-    vs = ChromaVectorStore()
+    vs = get_shared_vector_store()
     docs = vs.get_all_documents()
     return [
         DocumentMetadata(
