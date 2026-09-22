@@ -5,6 +5,20 @@ A reliability-first Retrieval-Augmented Generation (RAG) system engineered for h
 
 ---
 
+## 🌐 Live Deployments & Demo
+
+| Component | Platform | Live URL | Status |
+| :--- | :--- | :--- | :--- |
+| **Frontend Web App** | Vercel | [https://rag-orcin-sigma.vercel.app](https://rag-orcin-sigma.vercel.app) | [![Vercel](https://img.shields.io/badge/Vercel-Live-brightgreen?logo=vercel)](https://rag-orcin-sigma.vercel.app) |
+| **Backend API** | Render | [https://rag-5djx.onrender.com](https://rag-5djx.onrender.com) | [![Render](https://img.shields.io/badge/Render-Live-brightgreen?logo=render)](https://rag-5djx.onrender.com) |
+| **Interactive API Docs** | Swagger / OpenAPI | [https://rag-5djx.onrender.com/docs](https://rag-5djx.onrender.com/docs) | [![Swagger](https://img.shields.io/badge/Swagger-Docs-blue?logo=swagger)](https://rag-5djx.onrender.com/docs) |
+| **Health Check Endpoint** | Uptime & Telemetry | [https://rag-5djx.onrender.com/health](https://rag-5djx.onrender.com/health) | [![Health](https://img.shields.io/badge/Health-200%20OK-success)](https://rag-5djx.onrender.com/health) |
+
+> [!TIP]
+> **Demo API Key**: Production endpoints are secured with constant-time API authentication. For testing via curl or Postman, include: `X-API-Key: rag-secret-key-prod-2026`.
+
+---
+
 ## Architecture Overview
 
 ```
