@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: rag-backend
+    runtime: python
+    rootDir: backend
+    plan: free
+    region: singapore
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: LLM_PROVIDER
+        value: openrouter
+      - key: OPENROUTER_MODEL
+        value: meta-llama/llama-3.3-70b-instruct:free
+      - key: API_KEY
+        value: rag-secret-key-prod-2026
+      - key: EMBEDDING_PROVIDER
+        value: sentence-transformers
+      - key: EMBEDDING_MODEL
+        value: all-MiniLM-L6-v2
+      - key: RERANKER_MODEL
+        value: cross-encoder/ms-marco-MiniLM-L-6-v2
+      - key: CHROMA_PERSIST_DIR
+        value: ./data/chromadb
+      - key: DOCUMENT_STORE_DIR
+        value: ./data/documents
