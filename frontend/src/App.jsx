@@ -182,12 +182,21 @@ export default function App() {
 
       setMessages((prev) => [...prev, botMsg]);
     } catch (err) {
+      const isNetworkErr =
+        err.message &&
+        (err.message.includes('fetch') ||
+          err.message.includes('NetworkError') ||
+          err.message.includes('502') ||
+          err.message.includes('503'));
       const errorMsg = {
         role: 'assistant',
-        content: `Error: ${err.message || 'Unable to execute query.'}`,
+        content: isNetworkErr
+          ? 'Connecting to backend... Free cloud instances go to sleep when idle. Please wait 10-15 seconds and try asking again.'
+          : `Error: ${err.message || 'Unable to execute query.'}`,
         citations: [],
         confidence: 'low',
-        can_answer: false,
+        can_answer: null,
+        is_error: true,
       };
       setMessages((prev) => [...prev, errorMsg]);
     } finally {

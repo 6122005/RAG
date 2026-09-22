@@ -214,14 +214,19 @@ def generate_node(state: RAGState) -> Dict[str, Any]:
     try:
         response: GroundedAnswer = llm.invoke(messages)
     except Exception as e:
-        # Fallback if structured invoke fails
-        response = GroundedAnswer(
-            answer=f"An error occurred during structured generation: {str(e)}",
-            citations=[],
-            confidence="low",
-            can_answer=False,
-            model_used="error/generation-failed",
-        )
+        # If cloud LLM fails (e.g. invalid API key, quota limit), gracefully fallback to MockGroundedLLM
+        try:
+            from ..generation.llm import MockGroundedLLM
+            mock_llm = MockGroundedLLM()
+            response = mock_llm.with_structured_output(GroundedAnswer).invoke(messages)
+        except Exception as inner_e:
+            response = GroundedAnswer(
+                answer=f"An error occurred during structured generation: {str(e)}",
+                citations=[],
+                confidence="low",
+                can_answer=False,
+                model_used="error/generation-failed",
+            )
 
     model_name = getattr(response, "model_used", None) or "unknown"
 

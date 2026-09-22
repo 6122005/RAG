@@ -10,6 +10,7 @@ import {
   Check,
   RotateCcw,
   FileCheck2,
+  AlertCircle,
 } from 'lucide-react';
 import ConfidenceBadge from './ConfidenceBadge';
 import CitationCard from './CitationCard';
@@ -116,8 +117,29 @@ export default function ChatView({
                   </div>
                 )}
 
-                {/* Refusal Alert Visual State */}
-                {msg.role === 'assistant' && msg.can_answer === false && (
+                {/* Connection Notice */}
+                {msg.role === 'assistant' && msg.is_error && (
+                  <div
+                    style={{
+                      background: 'rgba(239, 68, 68, 0.08)',
+                      border: '1px solid rgba(239, 68, 68, 0.25)',
+                      borderRadius: '8px',
+                      padding: '10px 12px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      marginBottom: '10px',
+                    }}
+                  >
+                    <AlertCircle size={16} color="#f87171" style={{ flexShrink: 0 }} />
+                    <span style={{ fontSize: '0.78rem', color: '#fca5a5' }}>
+                      Server Connection Delay: Render free cloud backend may be starting up.
+                    </span>
+                  </div>
+                )}
+
+                {/* Refusal Alert Visual State (Only for real factual groundrail refusals) */}
+                {msg.role === 'assistant' && msg.can_answer === false && !msg.is_error && (
                   <div className="refusal-banner-enhanced">
                     <div className="refusal-icon-wrap">
                       <ShieldAlert size={20} color="#f87171" />
