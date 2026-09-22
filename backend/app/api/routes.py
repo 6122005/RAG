@@ -43,6 +43,7 @@ async def health_check() -> Dict[str, Any]:
     )
     return {
         "status": "healthy",
+        "version": "v1.1-speed-fix",
         "llm_provider": settings.LLM_PROVIDER,
         "llm_model": model_name,
         "has_openrouter_key": bool(settings.OPENROUTER_API_KEY),
