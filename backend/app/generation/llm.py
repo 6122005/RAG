@@ -460,12 +460,14 @@ def get_llm():
             mock = MockGroundedLLM(temperature=settings.LLM_TEMPERATURE)
             return mock.with_structured_output(GroundedAnswer)
 
-    elif provider == "gemini" and settings.GEMINI_API_KEY:
+    elif provider == "gemini" and settings.GEMINI_API_KEY and settings.GEMINI_API_KEY.startswith("AIza"):
         from langchain_google_genai import ChatGoogleGenerativeAI
         llm = ChatGoogleGenerativeAI(
             model=settings.GEMINI_MODEL,
             google_api_key=settings.GEMINI_API_KEY,
             temperature=settings.LLM_TEMPERATURE,
+            max_retries=1,
+            request_timeout=10,
         )
         return llm.with_structured_output(GroundedAnswer)
 
