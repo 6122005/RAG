@@ -26,7 +26,13 @@ from ..graph.workflow import execute_rag_pipeline, get_shared_hybrid_retriever
 router = APIRouter()
 
 
-@router.get("/health", tags=["System"])
+@router.api_route("/", methods=["GET", "HEAD"], tags=["System"])
+async def root_endpoint() -> Dict[str, str]:
+    """Root endpoint for ping and uptime checkers."""
+    return {"status": "ok", "message": "Grounded RAG API is running"}
+
+
+@router.api_route("/health", methods=["GET", "HEAD"], tags=["System"])
 async def health_check() -> Dict[str, Any]:
     """Lightweight zero-allocation health check verifying service status and active configurations."""
     settings = get_settings()
