@@ -14,27 +14,15 @@ from .logger import logger
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Application lifecycle initialization with background embedding warmup."""
-    import threading
+    """Application lifecycle initialization with strict memory bounding."""
     settings = get_settings()
     logger.info(
         f"Starting Grounded RAG Service on {settings.HOST}:{settings.PORT} "
         f"[LLM Provider: {settings.LLM_PROVIDER}, Embeddings: {settings.EMBEDDING_PROVIDER}]"
     )
-
-    def warmup_components():
-        try:
-            from .retrieval.vector_store import get_embedding_function, get_shared_vector_store
-            fn = get_embedding_function()
-            # Prime model in memory with a short string
-            fn(["warmup"])
-            get_shared_vector_store()
-            logger.info("Warmup complete: Embeddings primed in RAM.")
-        except Exception as e:
-            logger.warning(f"Embedding warmup warning: {e}")
-
-    threading.Thread(target=warmup_components, daemon=True).start()
     yield
+    import gc
+    gc.collect()
     logger.info("Shutting down Grounded RAG Service.")
 
 

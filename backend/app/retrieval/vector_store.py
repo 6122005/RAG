@@ -61,31 +61,39 @@ class ChromaVectorStore:
         )
 
     def add_chunks(self, chunks: List[DocumentChunk]) -> None:
-        """Add or update document chunks in the Chroma collection."""
+        """Add or update document chunks in the Chroma collection in memory-safe micro-batches."""
         if not chunks:
             return
 
-        ids = [chunk.chunk_id for chunk in chunks]
-        documents = [chunk.text for chunk in chunks]
-        metadatas = [
-            {
-                "source": str(chunk.source),
-                "page": int(chunk.page),
-                "chunk_id": str(chunk.chunk_id),
-                "chunk_index": int(chunk.chunk_index),
-                "section": str(chunk.section),
-                "char_count": int(chunk.char_count),
-                "token_count": int(chunk.token_count),
-            }
-            for chunk in chunks
-        ]
+        import gc
 
-        # Chroma upsert ensures idempotency
-        self.collection.upsert(
-            ids=ids,
-            documents=documents,
-            metadatas=metadatas,
-        )
+        # Micro-batching (6 chunks per batch) prevents PyTorch CPU tensor buffer memory spikes on 512MB RAM
+        batch_size = 6
+        for i in range(0, len(chunks), batch_size):
+            b_chunks = chunks[i : i + batch_size]
+            b_ids = [c.chunk_id for c in b_chunks]
+            b_docs = [c.text for c in b_chunks]
+            b_meta = [
+                {
+                    "source": str(c.source),
+                    "page": int(c.page),
+                    "chunk_id": str(c.chunk_id),
+                    "chunk_index": int(c.chunk_index),
+                    "section": str(c.section),
+                    "char_count": int(c.char_count),
+                    "token_count": int(c.token_count),
+                }
+                for c in b_chunks
+            ]
+            self.collection.upsert(
+                ids=b_ids,
+                documents=b_docs,
+                metadatas=b_meta,
+            )
+            del b_chunks, b_ids, b_docs, b_meta
+            gc.collect()
+
+        gc.collect()
 
     def similarity_search_with_score(
         self,

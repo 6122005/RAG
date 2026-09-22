@@ -30,13 +30,25 @@ class IngestionPipeline:
             overlap_pct=overlap_pct,
         )
 
+        # Free raw document memory immediately
+        file_type = loaded_doc.file_type
+        doc_filename = loaded_doc.filename
+        page_count = len(loaded_doc.pages)
+        del loaded_doc
+        import gc
+        gc.collect()
+
         if not chunks:
             return {
-                "filename": loaded_doc.filename,
+                "filename": doc_filename,
                 "status": "warning",
                 "message": "Document contains no readable text.",
                 "chunk_count": 0,
             }
+
+        # Cap max chunks to 50 to guarantee memory stays strictly below 300MB on free cloud tiers
+        if len(chunks) > 50:
+            chunks = chunks[:50]
 
         # 3. Add to ChromaDB vector store
         if self.vector_store:
@@ -46,11 +58,13 @@ class IngestionPipeline:
         if self.bm25_retriever:
             self.bm25_retriever.add_chunks(chunks)
 
+        gc.collect()
+
         return {
-            "filename": loaded_doc.filename,
+            "filename": doc_filename,
             "status": "success",
-            "file_type": loaded_doc.file_type,
-            "page_count": len(loaded_doc.pages),
+            "file_type": file_type,
+            "page_count": page_count,
             "chunk_count": len(chunks),
             "sample_chunk_id": chunks[0].chunk_id if chunks else None,
         }
